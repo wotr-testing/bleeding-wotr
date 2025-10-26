@@ -1,0 +1,76 @@
+hash-format = "sha256"
+
+[[files]]
+file = "mods/appleskin.pw.toml"
+hash = "5f870a177008d5ca9f80e0b73ecea133f959a5ea15b502671ca0fdb998efa0c7"
+metafile = true
+
+[[files]]
+file = "mods/architectury-api.pw.toml"
+hash = "0fe1b9b1f7a835a8d8ac799a002132cb6ecb9b70d9a7588de0e4992917c38a21"
+metafile = true
+
+[[files]]
+file = "mods/cloth-config.pw.toml"
+hash = "07fda0ff1dad214a8f594120eb4f71e4a9784fe9152773e6df67e7d32e661104"
+metafile = true
+
+[[files]]
+file = "mods/controlling.pw.toml"
+hash = "dbbbd764d00656c7689af3d4ef9b12705d20abae1925ac51b8b8c318ce30fa37"
+metafile = true
+
+[[files]]
+file = "mods/geckolib.pw.toml"
+hash = "9673ce7b5126229b5b68bfa632ee98393bfc49d5c6cf230d4e106ade600aae2f"
+metafile = true
+
+[[files]]
+file = "mods/immediatelyfast.pw.toml"
+hash = "cf80cf0a4f8cd804c078950104ab705edd982427f83c63fa53eda25c3a0c803f"
+metafile = true
+
+[[files]]
+file = "mods/jade.pw.toml"
+hash = "c14351a76995cd39b8c3588b7864f98ae8b5b6c7e3e117b0cbedcbeff80c021a"
+metafile = true
+
+[[files]]
+file = "mods/lithium.pw.toml"
+hash = "23f048a8f0926cfa69ba0d40c441a4f49ea02955324884fd9c059a7a0a6c5b6a"
+metafile = true
+
+[[files]]
+file = "mods/mouse-tweaks.pw.toml"
+hash = "de5c09bea3b3ebf68a134fb7eab9d50dd29f56b293dc7b3877380af26d6d4c7d"
+metafile = true
+
+[[files]]
+file = "mods/no-chat-reports.pw.toml"
+hash = "b2e9e3e56ad806c27f2e646add49be8da7c16f5d7443aab86cac45eab202e57a"
+metafile = true
+
+[[files]]
+file = "mods/roughly-enough-items.pw.toml"
+hash = "aa360bf9ce063d726a4420efa2bc0d99b09e36a312574923d5ff1f3894d07ecb"
+metafile = true
+
+[[files]]
+file = "mods/searchables.pw.toml"
+hash = "951d39ca3e646aa73c705fce007c94ea9b267a6888f680bc2444896d22c09f7a"
+metafile = true
+
+[[files]]
+file = "mods/sodium.pw.toml"
+hash = "ba8175b4bdee11e510d74358277182f1de25592ffc0eac103984856faf81e8a6"
+metafile = true
+
+[[files]]
+file = "mods/xaeros-minimap.pw.toml"
+hash = "64b3bf8b97a14342a9db4f26e618704d10f49ae42b8488f22ed763a5c6165980"
+metafile = true
+
+[[files]]
+file = "mods/xaeros-world-map.pw.toml"
+hash = "e218f503950932cf4f4e9f49ab87d933339db3b593f1f5c6d6df6fe3807e6f09"
+metafile = true

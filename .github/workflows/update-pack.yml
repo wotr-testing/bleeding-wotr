@@ -1,0 +1,122 @@
+name: Nightly Build Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    outputs:
+      commit_sha: ${{ steps.find_jar.outputs.commit_sha }}
+
+    steps:
+      - name: Get latest successful nightly build run
+        id: get_run
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Fetching latest successful workflow run for nightly-build.yml on main"
+          run_id=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
+            "https://api.github.com/repos/Wanderers-Of-The-Rift/wotr-mod/actions/workflows/nightly-build.yml/runs?branch=main&status=success" \
+            | jq -r '.workflow_runs[0].id')
+
+          if [ "$run_id" == "null" ] || [ -z "$run_id" ]; then
+            echo "❌ No successful workflow run found."
+            exit 1
+          fi
+
+          echo "run_id=$run_id" >> $GITHUB_OUTPUT
+
+      - name: Get artifact download URL
+        id: get_artifact
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          run_id=${{ steps.get_run.outputs.run_id }}
+
+          artifact_url=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
+            "https://api.github.com/repos/Wanderers-Of-The-Rift/wotr-mod/actions/runs/$run_id/artifacts" \
+            | jq -r '.artifacts[0].archive_download_url')
+
+          if [ "$artifact_url" == "null" ] || [ -z "$artifact_url" ]; then
+            echo "❌ No artifact found."
+            exit 1
+          fi
+
+          echo "artifact_url=$artifact_url" >> $GITHUB_OUTPUT
+
+      - name: Download and extract artifact
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Downloading artifact..."
+          curl -L -H "Authorization: Bearer $GH_TOKEN" \
+            -o artifact.zip "${{ steps.get_artifact.outputs.artifact_url }}"
+
+          unzip artifact.zip -d extracted
+          ls -l extracted
+
+      - name: Find JAR file
+        id: find_jar
+        run: |
+          jar_file=$(find extracted -type f -name "wotr-*.jar" | head -n 1)
+          if [ -z "$jar_file" ]; then
+            echo "❌ No JAR file found!"
+            exit 1
+          fi
+
+          commit_sha=$(basename "$jar_file" | sed -E 's/wotr-([a-f0-9]+)\.jar/\1/')
+          echo "jar_file=$jar_file" >> $GITHUB_OUTPUT
+          echo "commit_sha=$commit_sha" >> $GITHUB_OUTPUT
+          echo "Found JAR: $jar_file (commit: $commit_sha)"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: bleeding-${{ steps.find_jar.outputs.commit_sha }}
+          name: Automated Release ${{ steps.find_jar.outputs.commit_sha }}
+          body: |
+            This release was automatically created from the latest nightly build.
+
+            **Source commit:** `${{ steps.find_jar.outputs.commit_sha }}`
+          files: ${{ steps.find_jar.outputs.jar_file }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  update-packwiz:
+    runs-on: ubuntu-latest
+    needs: create-release
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Make packwiz-linux executable
+        run: chmod +x packwiz-linux
+
+      - name: Add latest mod version to the pack
+        run: ./packwiz-linux update sodium # todo
+
+      - name: Refresh packwiz index
+        run: ./packwiz-linux refresh
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'Update packwiz'
+          add_options: '-u'
+
+      - name: Export curseforge pack
+        run: ./packwiz-linux curseforge export -o wotr-bleeding-${{ needs.create-release.outputs.commit_sha }}-curseforge.zip
+
+      - name: Export modrinth pack
+        run: ./packwiz-linux modrinth export -o wotr-bleeding-${{ needs.create-release.outputs.commit_sha }}-modrinth.mrpack
+
+      - name: Add packs to release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: bleeding-${{ needs.create-release.outputs.commit_sha }}
+          files: |
+            wotr-bleeding-${{ needs.create-release.outputs.commit_sha }}-curseforge.zip
+            wotr-bleeding-${{ needs.create-release.outputs.commit_sha }}-modrinth.mrpack

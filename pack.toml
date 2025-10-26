@@ -1,0 +1,12 @@
+name = "Wanderers of the Rift Pack"
+version = "0.1.1"
+pack-format = "packwiz:1.1.0"
+
+[index]
+file = "index.toml"
+hash-format = "sha256"
+hash = "9e00141bf58bfe1da2fd8fed3377cfe8ba9524ec52e67e0edacb2caeda467179"
+
+[versions]
+minecraft = "1.21.4"
+neoforge = "21.4.136"

@@ -1,0 +1,13 @@
+.idea
+.vscode
+
+# Exclude exported packs
+*.zip
+*.mrpack
+
+# Exclude packwiz file
+/packwiz-linux
+*.exe
+
+# exclude github actions
+.github
