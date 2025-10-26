@@ -99,7 +99,7 @@ jobs:
         run: chmod +x packwiz-linux
 
       - name: Add latest mod version to the pack
-        run: ./packwiz-linux update sodium # todo
+        run: ./packwiz-linux update wotr
 
       - name: Refresh packwiz index
         run: ./packwiz-linux refresh

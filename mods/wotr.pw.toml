@@ -1,0 +1,15 @@
+name = "wotr"
+filename = "wotr-12c57d0.jar"
+side = "both"
+
+[download]
+url = "https://github.com/wotr-testing/bleeding-wotr/releases/download/bleeding-12c57d0/wotr-12c57d0.jar"
+hash-format = "sha256"
+hash = "81cff372951dd0d49d8bae6caa8d62512f5c7d29d5c18f88fecad33e41a9d5ae"
+
+[update]
+[update.github]
+branch = "main"
+regex = "^.+(?<!-api|-dev|-dev-preshadow|-sources)\\.jar$"
+slug = "wotr-testing/bleeding-wotr"
+tag = "bleeding-12c57d0"
